@@ -59,7 +59,11 @@ def list_tasks(db: Session = Depends(get_db)):
     }
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    response_model=TaskSingleResponse,
+)
 def create_task(
     task: TaskCreate,
     db: Session = Depends(get_db),
@@ -76,11 +80,14 @@ def create_task(
 
     return {
         "message": "Task created successfully",
-        "task": new_task,
+        "data": new_task,
     }
 
 
-@router.patch("/{task_id}")
+@router.patch(
+    "/{task_id}",
+    response_model=TaskSingleResponse,
+)
 def update_task(
     task_id: int,
     task: TaskUpdate,
@@ -104,10 +111,5 @@ def update_task(
 
     return {
         "message": "Task updated successfully",
-        "data": {
-            "id": existing_task.id,
-            "title": existing_task.title,
-            "description": existing_task.description,
-            "status": existing_task.status,
-        },
+        "data": existing_task,
     }
