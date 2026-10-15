@@ -1,58 +1,78 @@
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
-from my_fastapi_app_v2.schemas.task import TaskCreate, TaskUpdate
+from my_fastapi_app_v2.database import get_db
+from my_fastapi_app_v2.models.task import Task
+from my_fastapi_app_v2.schemas.task import (
+    TaskCreate,
+    TaskListResponse,
+    TaskSingleResponse,
+    TaskUpdate,
+)
 
 router = APIRouter()
 
-tasks = {
-    1: {
-        "id": 1,
-        "title": "Learn FastAPI",
-        "description": "Study API development",
-        "status": "pending",
-    },
-    2: {
-        "id": 2,
-        "title": "Learn Pydantic",
-        "description": "Study request validation",
-        "status": "pending",
-    },
-}
 
-
-@router.get("/{task_id}")
-def get_task(task_id: int):
-    task = tasks.get(task_id)
+@router.get("/{task_id}", response_model=TaskSingleResponse)
+def get_task(
+    task_id: int,
+    db: Session = Depends(get_db),
+):
+    task = db.get(Task, task_id)
 
     if task is None:
-        raise HTTPException(status_code=404, detail="Task not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Task not found",
+        )
 
-    return {"data": task, "message": "Task retrieved successfully"}
+    return {
+        "message": "Task retrieved successfully",
+        "data": task,
+    }
 
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_task(task_id: int):
-    if task_id not in tasks:
-        raise HTTPException(status_code=404, detail="Task not found")
+def delete_task(task_id: int, db: Session = Depends(get_db)):
+    task = db.get(Task, task_id)
 
-    del tasks[task_id]
+    if task is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Task not found",
+        )
+
+    db.delete(task)
+    db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.get("/")
-def list_tasks():
-    return {"data": tasks, "message": "Tasks retrieved successfully"}
+@router.get("/", response_model=TaskListResponse)
+def list_tasks(db: Session = Depends(get_db)):
+    tasks = db.scalars(select(Task)).all()
+
+    return {
+        "message": "Tasks retrieved successfully",
+        "data": tasks,
+    }
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create_task(task: TaskCreate):
+def create_task(
+    task: TaskCreate,
+    db: Session = Depends(get_db),
+):
+    new_task = Task(
+        title=task.title,
+        description=task.description,
+        status="pending",
+    )
 
-    task_id = max(tasks.keys(), default=0) + 1
-
-    new_task = {"id": task_id, **task.model_dump(), "status": "pending"}
-
-    tasks[task_id] = new_task
+    db.add(new_task)
+    db.commit()
+    db.refresh(new_task)
 
     return {
         "message": "Task created successfully",
@@ -61,18 +81,33 @@ def create_task(task: TaskCreate):
 
 
 @router.patch("/{task_id}")
-def update_task(task_id: int, task: TaskUpdate):
-
-    existing_task = tasks.get(task_id)
+def update_task(
+    task_id: int,
+    task: TaskUpdate,
+    db: Session = Depends(get_db),
+):
+    existing_task = db.get(Task, task_id)
 
     if existing_task is None:
-        raise HTTPException(status_code=404, detail="Task not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Task not found",
+        )
 
     updates = task.model_dump(exclude_unset=True)
 
-    existing_task.update(updates)
+    for field, value in updates.items():
+        setattr(existing_task, field, value)
+
+    db.commit()
+    db.refresh(existing_task)
 
     return {
-        "message": "Task update received",
-        "updates": existing_task,
+        "message": "Task updated successfully",
+        "data": {
+            "id": existing_task.id,
+            "title": existing_task.title,
+            "description": existing_task.description,
+            "status": existing_task.status,
+        },
     }
