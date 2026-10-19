@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
-from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from my_fastapi_app_v2.database import get_db
@@ -11,10 +10,29 @@ from my_fastapi_app_v2.schemas.task import (
     TaskUpdate,
 )
 from my_fastapi_app_v2.services.task_service import (
+    create_task as create_task_service,
+)
+from my_fastapi_app_v2.services.task_service import (
+    get_task as get_task_service,
+)
+from my_fastapi_app_v2.services.task_service import (
+    list_tasks as list_task_service,
+)
+from my_fastapi_app_v2.services.task_service import (
     update_task as update_task_service,
 )
 
 router = APIRouter()
+
+
+@router.get("/", response_model=TaskListResponse)
+def list_tasks(db: Session = Depends(get_db)):
+    tasks = list_task_service(db)
+
+    return {
+        "message": "Tasks retrieved successfully",
+        "data": tasks,
+    }
 
 
 @router.get("/{task_id}", response_model=TaskSingleResponse)
@@ -22,7 +40,7 @@ def get_task(
     task_id: int,
     db: Session = Depends(get_db),
 ):
-    task = db.get(Task, task_id)
+    task = get_task_service(db, task_id)
 
     if task is None:
         raise HTTPException(
@@ -52,16 +70,6 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.get("/", response_model=TaskListResponse)
-def list_tasks(db: Session = Depends(get_db)):
-    tasks = db.scalars(select(Task)).all()
-
-    return {
-        "message": "Tasks retrieved successfully",
-        "data": tasks,
-    }
-
-
 @router.post(
     "/",
     status_code=status.HTTP_201_CREATED,
@@ -71,15 +79,7 @@ def create_task(
     task: TaskCreate,
     db: Session = Depends(get_db),
 ):
-    new_task = Task(
-        title=task.title,
-        description=task.description,
-        status="pending",
-    )
-
-    db.add(new_task)
-    db.commit()
-    db.refresh(new_task)
+    new_task = create_task_service(db, task)
 
     return {
         "message": "Task created successfully",
