@@ -28,7 +28,10 @@ Run the project for development
 
 Install package
 
-- uv add sqlalchemy pytest
+- uv add sqlalchemy pytest httpx
+- sqlalchemy (model)
+- pytest (for testing)
+- httpx2 (testing api endpoints) (dev)
 
 Run Test
 
