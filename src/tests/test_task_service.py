@@ -26,9 +26,18 @@ def test_get_task_returns_none_when_not_found(db):
 
 
 def test_create_task(db):
-    task = TaskCreate(
+    new_task = TaskCreate(
         title="Created task",
         description="Testing create",
     )
-    result = create_task(db, task)
+    result = create_task(db, new_task)
+
     assert result.title == "Created task"
+    assert result.id is not None
+
+    task = get_task(db, result.id)
+
+    assert task is not None
+
+    assert task.title == new_task.title
+    assert task.description == new_task.description
