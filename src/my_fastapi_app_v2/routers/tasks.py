@@ -10,6 +10,9 @@ from my_fastapi_app_v2.schemas.task import (
     TaskSingleResponse,
     TaskUpdate,
 )
+from my_fastapi_app_v2.services.task_service import (
+    update_task as update_task_service,
+)
 
 router = APIRouter()
 
@@ -93,23 +96,21 @@ def update_task(
     task: TaskUpdate,
     db: Session = Depends(get_db),
 ):
-    existing_task = db.get(Task, task_id)
+    updates = task.model_dump(exclude_unset=True)
 
-    if existing_task is None:
+    updated_task = update_task_service(
+        db,
+        task_id,
+        updates,
+    )
+
+    if updated_task is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Task not found",
         )
 
-    updates = task.model_dump(exclude_unset=True)
-
-    for field, value in updates.items():
-        setattr(existing_task, field, value)
-
-    db.commit()
-    db.refresh(existing_task)
-
     return {
         "message": "Task updated successfully",
-        "data": existing_task,
+        "data": updated_task,
     }
