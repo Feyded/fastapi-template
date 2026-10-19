@@ -1,8 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, HTTPException, Response, status
 
-from my_fastapi_app_v2.database import get_db
-from my_fastapi_app_v2.models.task import Task
+from my_fastapi_app_v2.dependencies import DbSession
 from my_fastapi_app_v2.schemas.task import (
     TaskCreate,
     TaskListResponse,
@@ -11,6 +9,9 @@ from my_fastapi_app_v2.schemas.task import (
 )
 from my_fastapi_app_v2.services.task_service import (
     create_task as create_task_service,
+)
+from my_fastapi_app_v2.services.task_service import (
+    delete_task as delete_task_service,
 )
 from my_fastapi_app_v2.services.task_service import (
     get_task as get_task_service,
@@ -26,7 +27,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=TaskListResponse)
-def list_tasks(db: Session = Depends(get_db)):
+def list_tasks(db: DbSession):
     tasks = list_task_service(db)
 
     return {
@@ -38,7 +39,7 @@ def list_tasks(db: Session = Depends(get_db)):
 @router.get("/{task_id}", response_model=TaskSingleResponse)
 def get_task(
     task_id: int,
-    db: Session = Depends(get_db),
+    db: DbSession,
 ):
     task = get_task_service(db, task_id)
 
@@ -55,17 +56,14 @@ def get_task(
 
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_task(task_id: int, db: Session = Depends(get_db)):
-    task = db.get(Task, task_id)
+def delete_task(task_id: int, db: DbSession):
+    task = delete_task_service(db, task_id)
 
     if task is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Task not found",
         )
-
-    db.delete(task)
-    db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -77,7 +75,7 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
 )
 def create_task(
     task: TaskCreate,
-    db: Session = Depends(get_db),
+    db: DbSession,
 ):
     new_task = create_task_service(db, task)
 
@@ -94,7 +92,7 @@ def create_task(
 def update_task(
     task_id: int,
     task: TaskUpdate,
-    db: Session = Depends(get_db),
+    db: DbSession,
 ):
     updates = task.model_dump(exclude_unset=True)
 

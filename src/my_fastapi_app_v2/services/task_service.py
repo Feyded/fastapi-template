@@ -48,3 +48,16 @@ def update_task(
     db.refresh(task)
 
     return task
+
+
+def delete_task(db: Session, task_id: int) -> Task | None:
+    task = db.get(Task, task_id)
+
+    if task is None:
+        return None
+
+    db.delete(task)
+
+    db.commit()
+
+    return task
