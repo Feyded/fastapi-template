@@ -1,5 +1,6 @@
 from my_fastapi_app_v2.models.task import Task
-from my_fastapi_app_v2.services.task_service import get_task
+from my_fastapi_app_v2.schemas.task import TaskCreate
+from my_fastapi_app_v2.services.task_service import create_task, get_task
 
 
 def test_get_task_returns_task_when_found(db):
@@ -22,3 +23,12 @@ def test_get_task_returns_task_when_found(db):
 def test_get_task_returns_none_when_not_found(db):
     result = get_task(db, 999999999)
     assert result is None
+
+
+def test_create_task(db):
+    task = TaskCreate(
+        title="Created task",
+        description="Testing create",
+    )
+    result = create_task(db, task)
+    assert result.title == "Created task"
