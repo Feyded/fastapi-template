@@ -41,3 +41,7 @@ uv add -D pytest httpx
 Run Test
 
 - uv run pytest -v
+
+Initialize alembic
+
+- uv run alembic init migrations
