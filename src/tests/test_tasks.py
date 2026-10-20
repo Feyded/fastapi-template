@@ -92,3 +92,20 @@ def test_delete_task(client):
     delete_response = client.delete(f"/tasks/{task_id}")
 
     assert delete_response.status_code == 204
+
+
+def test_get_task_returns_404_when_not_found(client):
+
+    response = client.get("/tasks/9999999")
+
+    assert response.status_code == 404
+
+
+def test_create_task_returns_422_when_invalid_payload(client):
+    payload = {
+        "title": "Original title",
+    }
+
+    response = client.post("/tasks", json=payload)
+
+    assert response.status_code == 422
