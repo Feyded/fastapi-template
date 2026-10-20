@@ -49,3 +49,7 @@ Initialize alembic
 Generate table migration
 
 - uv run alembic revision --autogenerate -m "create tasks table"
+
+Apply the migration
+
+- uv run alembic upgrade head
