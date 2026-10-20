@@ -18,11 +18,7 @@ def create_task(
     task_data: TaskCreate,
 ) -> Task:
 
-    new_task = Task(
-        title=task_data.title,
-        description=task_data.description,
-        status="pending",
-    )
+    new_task = Task(**task_data.model_dump(exclude_unset=True), status="pending")
 
     db.add(new_task)
     db.commit()
