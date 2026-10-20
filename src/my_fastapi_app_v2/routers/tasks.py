@@ -94,12 +94,11 @@ def update_task(
     task: TaskUpdate,
     db: DbSession,
 ):
-    updates = task.model_dump(exclude_unset=True)
 
     updated_task = update_task_service(
         db,
         task_id,
-        updates,
+        task,
     )
 
     if updated_task is None:

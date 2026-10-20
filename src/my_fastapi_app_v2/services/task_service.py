@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from my_fastapi_app_v2.models.task import Task
-from my_fastapi_app_v2.schemas.task import TaskCreate
+from my_fastapi_app_v2.schemas.task import TaskCreate, TaskUpdate
 
 
 def list_tasks(db: Session) -> list[Task]:
@@ -30,14 +30,16 @@ def create_task(
 def update_task(
     db: Session,
     task_id: int,
-    updates: dict,
+    task_data: TaskUpdate,
 ) -> Task | None:
     task = db.get(Task, task_id)
 
     if task is None:
         return None
 
-    for field, value in updates.items():
+    update_data = task_data.model_dump(exclude_unset=True)
+
+    for field, value in update_data.items():
         setattr(task, field, value)
 
     db.commit()
