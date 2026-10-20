@@ -26,7 +26,9 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("title", sa.String(length=100), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
-        sa.Column("status", sa.String(length=20), nullable=False),
+        sa.Column(
+            "status", sa.String(length=20), nullable=False, server_default="pending"
+        ),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_tasks_id"), "tasks", ["id"], unique=False)
