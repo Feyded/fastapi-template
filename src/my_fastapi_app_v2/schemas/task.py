@@ -13,12 +13,13 @@ class TaskUpdate(BaseModel):
 
 
 class TaskResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     title: str
     description: str | None
     status: str
-
-    model_config = ConfigDict(from_attributes=True)
+    priority: int
 
 
 class TaskSingleResponse(BaseModel):
