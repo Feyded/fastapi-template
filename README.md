@@ -62,6 +62,10 @@ Rollback the applied migration
 
 - uv run alembic downgrade -1
 
-Refresh the database
+Reset migration
 
 - uv run alembic downgrade base
+
+Check migrated tables
+
+- uv run alembic history
