@@ -24,7 +24,10 @@ def test_get_task(client, sample_task):
 
 def test_create_task(client):
 
-    payload = {"title": "title", "description": "description"}
+    payload = {
+        "title": "title",
+        "description": "description",
+    }
 
     response = client.post("/tasks", json=payload)
 
@@ -43,6 +46,7 @@ def test_update_task(client, sample_task):
 
     update_payload = {
         "title": "Updated title",
+        "due_date": None,
     }
 
     response = client.patch(

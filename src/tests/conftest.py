@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -51,6 +53,8 @@ def sample_task(db):
     task = Task(
         title="Sample task",
         description="Created by a fixture",
+        priority=1,
+        due_date=date(2026, 10, 25),
     )
 
     db.add(task)
