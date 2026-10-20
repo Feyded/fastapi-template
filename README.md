@@ -61,3 +61,7 @@ Check the applied migration
 Rollback the applied migration
 
 - uv run alembic downgrade -1
+
+Refresh the database
+
+- uv run alembic downgrade base

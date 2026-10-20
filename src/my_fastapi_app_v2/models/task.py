@@ -15,3 +15,8 @@ class Task(Base):
         nullable=False,
         default="pending",
     )
+    priority: Mapped[int] = mapped_column(
+        default=1,
+        server_default="1",
+        nullable=False,
+    )
