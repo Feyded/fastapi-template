@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 from my_fastapi_app_v2.database import Base, get_db
 from my_fastapi_app_v2.main import app
+from my_fastapi_app_v2.models.task import Task
 
 
 @pytest.fixture
@@ -43,3 +44,17 @@ def client(db):
         yield test_client
 
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def sample_task(db):
+    task = Task(
+        title="Sample task",
+        description="Created by a fixture",
+    )
+
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+
+    return task

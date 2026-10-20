@@ -11,22 +11,15 @@ def test_get_tasks(client):
     assert len(body["data"]) == 1
 
 
-def test_get_task(client):
-    payload = {"title": "title", "description": "description"}
+def test_get_task(client, sample_task):
 
-    create_reponse = client.post("/tasks", json=payload)
-
-    assert create_reponse.status_code == 201
-
-    task_id = create_reponse.json()["data"]["id"]
-
-    response = client.get(f"/tasks/{task_id}")
+    response = client.get(f"/tasks/{sample_task.id}")
 
     body = response.json()
 
     assert body["data"]["id"] is not None
-    assert body["data"]["title"] == "title"
-    assert body["data"]["description"] == "description"
+    assert body["data"]["title"] == "Sample task"
+    assert body["data"]["description"] == "Created by a fixture"
 
 
 def test_create_task(client):
@@ -46,25 +39,14 @@ def test_create_task(client):
     assert body["data"]["id"] is not None
 
 
-def test_update_task(client):
-    create_payload = {
-        "title": "Original title",
-        "description": "Original description",
-    }
-
-    create_response = client.post("/tasks", json=create_payload)
-
-    assert create_response.status_code == 201
-
-    task_id = create_response.json()["data"]["id"]
+def test_update_task(client, sample_task):
 
     update_payload = {
         "title": "Updated title",
-        "description": "Updated description",
     }
 
     response = client.patch(
-        f"/tasks/{task_id}",
+        f"/tasks/{sample_task.id}",
         json=update_payload,
     )
 
@@ -72,24 +54,14 @@ def test_update_task(client):
 
     body = response.json()
 
-    assert body["data"]["id"] == task_id
+    assert body["data"]["id"] == sample_task.id
     assert body["data"]["title"] == "Updated title"
-    assert body["data"]["description"] == "Updated description"
+    assert body["data"]["description"] == "Created by a fixture"
 
 
-def test_delete_task(client):
-    create_payload = {
-        "title": "Original title",
-        "description": "Original description",
-    }
+def test_delete_task(client, sample_task):
 
-    create_response = client.post("/tasks", json=create_payload)
-
-    assert create_response.status_code == 201
-
-    task_id = create_response.json()["data"]["id"]
-
-    delete_response = client.delete(f"/tasks/{task_id}")
+    delete_response = client.delete(f"/tasks/{sample_task.id}")
 
     assert delete_response.status_code == 204
 
@@ -109,3 +81,10 @@ def test_create_task_returns_422_when_invalid_payload(client):
     response = client.post("/tasks", json=payload)
 
     assert response.status_code == 422
+
+
+def test_get_task_returns_existing_task(client, sample_task):
+    response = client.get(f"/tasks/{sample_task.id}")
+
+    assert response.status_code == 200
+    assert response.json()["data"]["title"] == "Sample task"
