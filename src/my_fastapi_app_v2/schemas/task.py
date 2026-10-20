@@ -26,6 +26,7 @@ class TaskResponse(BaseModel):
     description: str | None
     status: str
     priority: int
+    due_date: date | None
 
 
 class TaskSingleResponse(BaseModel):
