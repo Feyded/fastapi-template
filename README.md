@@ -45,3 +45,7 @@ Run Test
 Initialize alembic
 
 - uv run alembic init migrations
+
+Generate table migration
+
+- uv run alembic revision --autogenerate -m "create tasks table"
