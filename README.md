@@ -57,3 +57,7 @@ Apply the migration
 Check the applied migration
 
 - uv run alembic current
+
+Rollback the applied migration
+
+- uv run alembic downgrade -1
