@@ -53,3 +53,7 @@ Generate table migration
 Apply the migration
 
 - uv run alembic upgrade head
+
+Check the applied migration
+
+- uv run alembic current
