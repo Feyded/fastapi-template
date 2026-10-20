@@ -28,8 +28,13 @@ Run the project for development
 
 Install package
 
-- uv add sqlalchemy pytest httpx
+uv add sqlalchemy alembic
+
 - sqlalchemy (model)
+- alembic (for migration)
+
+uv add -D pytest httpx
+
 - pytest (for testing)
 - httpx2 (testing api endpoints) (dev)
 
