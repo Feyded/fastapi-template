@@ -1,4 +1,4 @@
-def get_tasks(client):
+def test_get_tasks(client):
     payload = {"title": "title", "description": "description"}
 
     client.post("/tasks", json=payload)
@@ -11,7 +11,7 @@ def get_tasks(client):
     assert len(body["data"]) == 1
 
 
-def get_task(client):
+def test_get_task(client):
     payload = {"title": "title", "description": "description"}
 
     create_reponse = client.post("/tasks", json=payload)
