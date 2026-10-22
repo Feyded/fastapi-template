@@ -1,8 +1,8 @@
 """create tasks table
 
-Revision ID: 4ae12fa5ab66
-Revises:
-Create Date: 2026-10-20 14:05:42.890541
+Revision ID: 832b8adb556b
+Revises: 9d84a8bf11d4
+Create Date: 2026-10-22 15:29:00.152235
 
 """
 
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "4ae12fa5ab66"
-down_revision: str | Sequence[str] | None = None
+revision: str = "832b8adb556b"
+down_revision: str | Sequence[str] | None = "9d84a8bf11d4"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
@@ -24,12 +24,25 @@ def upgrade() -> None:
     op.create_table(
         "tasks",
         sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("title", sa.String(length=100), nullable=False),
         sa.Column("description", sa.String(length=500), nullable=False),
         sa.Column(
-            "status", sa.String(length=20), nullable=False, server_default="pending"
+            "status",
+            sa.String(length=20),
+            server_default=sa.text("'pending'"),
+            nullable=False,
+        ),
+        sa.Column(
+            "priority", sa.Integer(), server_default=sa.text("1"), nullable=False
+        ),
+        sa.Column("due_date", sa.Date(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["user_id"],
+            ["users.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("title"),
     )
     op.create_index(op.f("ix_tasks_id"), "tasks", ["id"], unique=False)
     # ### end Alembic commands ###

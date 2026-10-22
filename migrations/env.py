@@ -5,6 +5,7 @@ from sqlalchemy import engine_from_config, pool
 
 from my_fastapi_app_v2.database import Base
 from my_fastapi_app_v2.models.task import Task
+from my_fastapi_app_v2.models.user import User
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
