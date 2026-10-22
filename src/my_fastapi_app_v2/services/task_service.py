@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from my_fastapi_app_v2.exceptions import ConflictError
+from my_fastapi_app_v2.exceptions import ConflictError, NotFoundError
 from my_fastapi_app_v2.models.task import Task
 from my_fastapi_app_v2.schemas.task import TaskCreate, TaskUpdate
 
@@ -11,7 +11,12 @@ def list_tasks(db: Session) -> list[Task]:
 
 
 def get_task(db: Session, task_id: int) -> Task | None:
-    return db.get(Task, task_id)
+    task = db.get(Task, task_id)
+
+    if task is None:
+        raise NotFoundError("Task not found.")
+
+    return task
 
 
 def create_task(
@@ -40,7 +45,7 @@ def update_task(
     task = db.get(Task, task_id)
 
     if task is None:
-        return None
+        raise NotFoundError("Task not found")
 
     update_data = task_data.model_dump(exclude_unset=True)
 
@@ -57,7 +62,7 @@ def delete_task(db: Session, task_id: int) -> Task | None:
     task = db.get(Task, task_id)
 
     if task is None:
-        return None
+        raise NotFoundError("Task not found")
 
     db.delete(task)
 

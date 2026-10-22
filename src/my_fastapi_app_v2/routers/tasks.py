@@ -43,12 +43,6 @@ def get_task(
 ):
     task = get_task_service(db, task_id)
 
-    if task is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Task not found",
-        )
-
     return {
         "message": "Task retrieved successfully",
         "data": task,
@@ -57,13 +51,7 @@ def get_task(
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_task(task_id: int, db: DbSession):
-    task = delete_task_service(db, task_id)
-
-    if task is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Task not found",
-        )
+    delete_task_service(db, task_id)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -96,12 +84,6 @@ def update_task(
         task_id,
         task,
     )
-
-    if updated_task is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Task not found",
-        )
 
     return {
         "message": "Task updated successfully",
