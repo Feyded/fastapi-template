@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from my_fastapi_app_v2.exceptions import NotFoundError
+from my_fastapi_app_v2.exceptions import ConflictError, NotFoundError
 from my_fastapi_app_v2.models.user import User
 from my_fastapi_app_v2.schemas.user import UserCreate
 
@@ -18,10 +18,18 @@ def get_user(db: Session, user_id: int) -> User:
 
     return user
 
-def create_user(db: Session, payload: UserCreate) -> User:
-    user = db.get(User, user_id)
 
-    if user is None:
-        raise NotFoundError("User not found.")
+def create_user(db: Session, payload: UserCreate) -> User:
+    existing_user = db.scalar(select(User).where(User.email == payload.email))
+
+    if existing_user is not None:
+        raise ConflictError("A user with this email already exists.")
+
+    user = User(**payload.model_dump(exclude_unset=True))
+
+    db.add(user)
+    db.rollback()
+    # db.commit()
+    # db.refresh(user)
 
     return user

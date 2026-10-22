@@ -1,13 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 
 from my_fastapi_app_v2.dependencies import DbSession
-from my_fastapi_app_v2.schemas.user import UserCreate
+from my_fastapi_app_v2.schemas.user import UserCreate, UserSingleResponse
 from my_fastapi_app_v2.services import user as user_service
 
-router = APIRouter(prefix="users", tags=["Users"])
+router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.get("/")
+@router.get("/", status_code=status.HTTP_200_OK)
 def list_users(db: DbSession):
     users = user_service.list_users(db)
 
@@ -17,7 +17,7 @@ def list_users(db: DbSession):
     }
 
 
-@router.get("/{user_id}")
+@router.get("/{user_id}", status_code=status.HTTP_200_OK)
 def get_user(
     user_id: int,
     db: DbSession,
@@ -30,12 +30,14 @@ def get_user(
     }
 
 
-@router.post("/")
+@router.post(
+    "/", response_model=UserSingleResponse, status_code=status.HTTP_201_CREATED
+)
 def create_user(
-    user_data: UserCreate,
+    payload: UserCreate,
     db: DbSession,
 ):
-    user = user_service.create_user(db, user_data)
+    user = user_service.create_user(db, payload)
 
     return {
         "message": "User created successfully",

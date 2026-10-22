@@ -9,7 +9,7 @@ from my_fastapi_app_v2.schemas.task import (
 )
 from my_fastapi_app_v2.services import task as task_service
 
-router = APIRouter(prefix="tasks", tags=["Tasks"])
+router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
 
 @router.get("/", response_model=TaskListResponse)
