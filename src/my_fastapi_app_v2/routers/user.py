@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from my_fastapi_app_v2.dependencies import DbSession
 from my_fastapi_app_v2.schemas.user import UserCreate
-from my_fastapi_app_v2.services import users as user_service
+from my_fastapi_app_v2.services import user as user_service
 
 router = APIRouter(prefix="users", tags=["Users"])
 

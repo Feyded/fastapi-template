@@ -7,7 +7,7 @@ from my_fastapi_app_v2.schemas.task import (
     TaskSingleResponse,
     TaskUpdate,
 )
-from my_fastapi_app_v2.services import tasks as task_service
+from my_fastapi_app_v2.services import task as task_service
 
 router = APIRouter(prefix="tasks", tags=["Tasks"])
 
