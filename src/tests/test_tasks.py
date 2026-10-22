@@ -92,3 +92,16 @@ def test_get_task_returns_existing_task(client, sample_task):
 
     assert response.status_code == 200
     assert response.json()["data"]["title"] == "Sample task"
+
+
+def test_create_error_when_duplicate_title_exist(client):
+    payload = {
+        "title": "title",
+        "description": "description",
+    }
+
+    first_response = client.post("/tasks", json=payload)
+    second_response = client.post("/tasks", json=payload)
+
+    assert first_response.status_code == 201
+    assert second_response.status_code == 409

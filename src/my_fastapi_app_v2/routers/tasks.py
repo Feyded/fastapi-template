@@ -68,20 +68,16 @@ def delete_task(task_id: int, db: DbSession):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.post(
-    "/",
-    status_code=status.HTTP_201_CREATED,
-    response_model=TaskSingleResponse,
-)
-def create_task(
-    task: TaskCreate,
+@router.post("/", status_code=201)
+def create_task_endpoint(
+    task_data: TaskCreate,
     db: DbSession,
 ):
-    new_task = create_task_service(db, task)
+    task = create_task_service(db, task_data)
 
     return {
         "message": "Task created successfully",
-        "data": new_task,
+        "data": task,
     }
 
 

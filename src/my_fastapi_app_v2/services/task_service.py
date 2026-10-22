@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from my_fastapi_app_v2.exceptions import ConflictError
 from my_fastapi_app_v2.models.task import Task
 from my_fastapi_app_v2.schemas.task import TaskCreate, TaskUpdate
 
@@ -18,12 +19,16 @@ def create_task(
     task_data: TaskCreate,
 ) -> Task:
 
+    existing_task_id = db.scalar(select(Task.id).where(Task.title == task_data.title))
+
+    if existing_task_id is not None:
+        raise ConflictError("A task with this title already exists.")
+
     new_task = Task(**task_data.model_dump(exclude_unset=True), status="pending")
 
     db.add(new_task)
     db.commit()
     db.refresh(new_task)
-
     return new_task
 
 
