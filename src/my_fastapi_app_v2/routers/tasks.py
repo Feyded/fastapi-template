@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, Response, status
 
 from my_fastapi_app_v2.dependencies import DbSession
 from my_fastapi_app_v2.schemas.task import (
