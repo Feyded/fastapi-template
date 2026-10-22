@@ -7,28 +7,14 @@ from my_fastapi_app_v2.schemas.task import (
     TaskSingleResponse,
     TaskUpdate,
 )
-from my_fastapi_app_v2.services.task_service import (
-    create_task as create_task_service,
-)
-from my_fastapi_app_v2.services.task_service import (
-    delete_task as delete_task_service,
-)
-from my_fastapi_app_v2.services.task_service import (
-    get_task as get_task_service,
-)
-from my_fastapi_app_v2.services.task_service import (
-    list_tasks as list_task_service,
-)
-from my_fastapi_app_v2.services.task_service import (
-    update_task as update_task_service,
-)
+from my_fastapi_app_v2.services import tasks as task_service
 
-router = APIRouter()
+router = APIRouter(prefix="tasks", tags=["Tasks"])
 
 
 @router.get("/", response_model=TaskListResponse)
 def list_tasks(db: DbSession):
-    tasks = list_task_service(db)
+    tasks = task_service.list_task_service(db)
 
     return {
         "message": "Tasks retrieved successfully",
@@ -41,7 +27,7 @@ def get_task(
     task_id: int,
     db: DbSession,
 ):
-    task = get_task_service(db, task_id)
+    task = task_service.get_task_service(db, task_id)
 
     return {
         "message": "Task retrieved successfully",
@@ -51,7 +37,7 @@ def get_task(
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_task(task_id: int, db: DbSession):
-    delete_task_service(db, task_id)
+    task_service.delete_task_service(db, task_id)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -61,7 +47,7 @@ def create_task_endpoint(
     task_data: TaskCreate,
     db: DbSession,
 ):
-    task = create_task_service(db, task_data)
+    task = task_service.create_task_service(db, task_data)
 
     return {
         "message": "Task created successfully",
@@ -79,7 +65,7 @@ def update_task(
     db: DbSession,
 ):
 
-    updated_task = update_task_service(
+    updated_task = task_service.update_task_service(
         db,
         task_id,
         task,
