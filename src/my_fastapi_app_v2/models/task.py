@@ -9,7 +9,7 @@ from my_fastapi_app_v2.database import Base
 class Task(Base):
     __tablename__ = "tasks"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"),
@@ -38,4 +38,4 @@ class Task(Base):
         nullable=True,
     )
 
-    user: Mapped["User"] = relationship(back_populates="tasks")
+    user: Mapped[User] = relationship(back_populates="tasks")
