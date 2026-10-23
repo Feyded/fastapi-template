@@ -1,13 +1,17 @@
 from fastapi import APIRouter, status
 
 from my_fastapi_app_v2.dependencies import DbSession
-from my_fastapi_app_v2.schemas.user import UserCreate, UserSingleResponse
+from my_fastapi_app_v2.schemas.user import (
+    UserCreate,
+    UserListResponse,
+    UserSingleResponse,
+)
 from my_fastapi_app_v2.services import user as user_service
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.get("/", status_code=status.HTTP_200_OK)
+@router.get("/", response_model=UserListResponse, status_code=status.HTTP_200_OK)
 def list_users(db: DbSession):
     users = user_service.list_users(db)
 
