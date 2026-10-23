@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, Query, Response, status
 
 from my_fastapi_app_v2.dependencies import CurrentUser, DbSession, require_role
 from my_fastapi_app_v2.schemas.task import (
@@ -15,8 +15,12 @@ router = APIRouter(
 
 
 @router.get("/", response_model=TaskListResponse)
-def list_tasks(db: DbSession):
-    tasks = task_service.list_tasks(db)
+def list_tasks(
+    db: DbSession,
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=10, ge=1, le=100),
+):
+    tasks = task_service.list_tasks(db, page, limit)
 
     return {
         "message": "Tasks retrieved successfully",

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Query, status
 
 from my_fastapi_app_v2.dependencies import DbSession
 from my_fastapi_app_v2.schemas.user import (
@@ -12,8 +12,12 @@ router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.get("/", response_model=UserListResponse, status_code=status.HTTP_200_OK)
-def list_users(db: DbSession):
-    users = user_service.list_users(db)
+def list_users(
+    db: DbSession,
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=10, ge=10, le=100),
+):
+    users = user_service.list_users(db, page, limit)
 
     return {
         "message": "Users retrieved successfully",

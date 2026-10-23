@@ -7,8 +7,10 @@ from my_fastapi_app_v2.models.user import User
 from my_fastapi_app_v2.schemas.user import UserCreate
 
 
-def list_users(db: Session) -> list[User]:
-    return db.scalars(select(User)).all()
+def list_users(db: Session, page: int = 1, limit: int = 10) -> list[User]:
+    offset = (page - 1) * limit
+    statement = select(User).offset(offset).limit(limit)
+    return db.scalars(statement).all()
 
 
 def get_user(db: Session, user_id: int) -> User:

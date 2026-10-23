@@ -7,8 +7,11 @@ from my_fastapi_app_v2.models.task import Task
 from my_fastapi_app_v2.schemas.task import TaskCreate, TaskUpdate
 
 
-def list_tasks(db: Session) -> list[Task]:
-    statement = select(Task).options(selectinload(Task.user))
+def list_tasks(db: Session, page: int, limit: int) -> list[Task]:
+    offset = (page - 1) * limit
+    statement = (
+        select(Task).options(selectinload(Task.user)).offset(offset).limit(limit)
+    )
     return db.scalars(statement).all()
 
 
