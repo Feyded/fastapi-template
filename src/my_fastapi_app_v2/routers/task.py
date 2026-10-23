@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Depends, Response, status
 
-from my_fastapi_app_v2.dependencies import DbSession
+from my_fastapi_app_v2.dependencies import DbSession, require_role
 from my_fastapi_app_v2.schemas.task import (
     TaskCreate,
     TaskListResponse,
@@ -9,7 +9,9 @@ from my_fastapi_app_v2.schemas.task import (
 )
 from my_fastapi_app_v2.services import task as task_service
 
-router = APIRouter(prefix="/tasks", tags=["Tasks"])
+router = APIRouter(
+    prefix="/tasks", tags=["Tasks"], dependencies=[Depends(require_role(["admin"]))]
+)
 
 
 @router.get("/", response_model=TaskListResponse)

@@ -26,4 +26,11 @@ class User(Base):
         nullable=False,
     )
 
+    role: Mapped[str] = mapped_column(
+        String(255),
+        default="user",
+        server_default="user",
+        nullable=False,
+    )
+
     tasks: Mapped[list[Task]] = relationship(back_populates="user")

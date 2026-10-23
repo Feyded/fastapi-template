@@ -1,8 +1,58 @@
 from typing import Annotated
 
+import jwt
 from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
+from jwt.exceptions import InvalidTokenError
 from sqlalchemy.orm import Session
 
+from my_fastapi_app_v2.core.security import ALGORITHM
+from my_fastapi_app_v2.core.settings import settings
 from my_fastapi_app_v2.database import get_db
+from my_fastapi_app_v2.exceptions import ForbiddenError, UnauthorizedError
+from my_fastapi_app_v2.models.user import User
 
 DbSession = Annotated[Session, Depends(get_db)]
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+
+
+def get_current_user(
+    token: Annotated[str, Depends(oauth2_scheme)],
+    db: DbSession,
+) -> User:
+    try:
+        payload = jwt.decode(
+            token,
+            settings.SECRET_KEY,
+            algorithms=[ALGORITHM],
+        )
+
+        subject = payload.get("sub")
+
+        if subject is None:
+            raise InvalidTokenError("Missing subject")
+
+        user_id = int(subject)
+
+    except InvalidTokenError, TypeError, ValueError:
+        raise UnauthorizedError("Could not validate credentials")
+
+    user = db.get(User, user_id)
+
+    if user is None:
+        raise UnauthorizedError("Could not validate credentials")
+
+    return user
+
+
+def require_role(allowed_roles: list[str]):
+    def role_checker(
+        current_user: Annotated[User, Depends(get_current_user)],
+    ) -> User:
+        if current_user.role not in allowed_roles:
+            raise ForbiddenError("You do not have permission to access this resource")
+
+        return current_user
+
+    return role_checker
