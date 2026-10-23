@@ -2,6 +2,8 @@ from datetime import date
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from my_fastapi_app_v2.schemas.user import UserResponse
+
 
 class TaskCreate(BaseModel):
     title: str = Field(min_length=1, max_length=100)
@@ -27,6 +29,7 @@ class TaskResponse(BaseModel):
     status: str
     priority: int
     due_date: date | None
+    user: UserResponse
 
 
 class TaskSingleResponse(BaseModel):

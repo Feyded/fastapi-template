@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Response, status
 
-from my_fastapi_app_v2.dependencies import DbSession, require_role
+from my_fastapi_app_v2.dependencies import CurrentUser, DbSession, require_role
 from my_fastapi_app_v2.schemas.task import (
     TaskCreate,
     TaskListResponse,
@@ -44,12 +44,11 @@ def delete_task(task_id: int, db: DbSession):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.post("/", status_code=201)
-def create_task_endpoint(
-    payload: TaskCreate,
-    db: DbSession,
-):
-    task = task_service.create_task(db, payload)
+@router.post(
+    "/", response_model=TaskSingleResponse, status_code=status.HTTP_201_CREATED
+)
+def create_task_endpoint(payload: TaskCreate, db: DbSession, current_user: CurrentUser):
+    task = task_service.create_task(db, payload, current_user)
 
     return {
         "message": "Task created successfully",
