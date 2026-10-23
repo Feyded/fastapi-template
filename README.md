@@ -69,3 +69,14 @@ Reset migration
 Check migrated tables
 
 - uv run alembic history
+
+Install pydantic settings to read env variables
+
+- uv add pydantic-settings
+
+Install authentication
+
+- pyjwt (creates and verifies jwt)
+- pwdlib[argon2] (securely hashes and verifies passwords)
+- python-multipart (supports OAuth2 form-based login requests)
+- uv add pyjwt "pwdlib[argon2]" python-multipart
