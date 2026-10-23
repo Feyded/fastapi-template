@@ -2,7 +2,7 @@ from typing import Annotated
 
 import jwt
 from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt.exceptions import InvalidTokenError
 from sqlalchemy.orm import Session
 
@@ -14,13 +14,15 @@ from my_fastapi_app_v2.models.user import User
 
 DbSession = Annotated[Session, Depends(get_db)]
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+bearer_scheme = HTTPBearer()
 
 
 def get_current_user(
-    token: Annotated[str, Depends(oauth2_scheme)],
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)],
     db: DbSession,
 ) -> User:
+    token = credentials.credentials
+
     try:
         payload = jwt.decode(
             token,
