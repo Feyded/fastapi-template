@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from my_fastapi_app_v2.core.security import hash_password
 from my_fastapi_app_v2.exceptions import ConflictError, NotFoundError
 from my_fastapi_app_v2.models.user import User
 from my_fastapi_app_v2.schemas.user import UserCreate
@@ -25,11 +26,13 @@ def create_user(db: Session, payload: UserCreate) -> User:
     if existing_user is not None:
         raise ConflictError("A user with this email already exists.")
 
-    user = User(**payload.model_dump(exclude_unset=True))
+    user_data = payload.model_dump(exclude=["password"])
+    user_data["hashed_password"] = hash_password(payload.password)
+
+    user = User(**user_data)
 
     db.add(user)
-    db.rollback()
-    # db.commit()
-    # db.refresh(user)
+    db.commit()
+    db.refresh(user)
 
     return user
