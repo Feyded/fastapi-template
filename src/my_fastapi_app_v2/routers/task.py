@@ -44,10 +44,10 @@ def delete_task(task_id: int, db: DbSession):
 
 @router.post("/", status_code=201)
 def create_task_endpoint(
-    task_data: TaskCreate,
+    payload: TaskCreate,
     db: DbSession,
 ):
-    task = task_service.create_task_service(db, task_data)
+    task = task_service.create_task_service(db, payload)
 
     return {
         "message": "Task created successfully",
@@ -61,14 +61,14 @@ def create_task_endpoint(
 )
 def update_task(
     task_id: int,
-    task: TaskUpdate,
+    payload: TaskUpdate,
     db: DbSession,
 ):
 
     updated_task = task_service.update_task_service(
         db,
         task_id,
-        task,
+        payload,
     )
 
     return {
