@@ -3,13 +3,18 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+from my_fastapi_app_v2.core.settings import settings
 from my_fastapi_app_v2.database import Base
-from my_fastapi_app_v2.models.task import Task
-from my_fastapi_app_v2.models.user import User
+from my_fastapi_app_v2.models import task, user
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+config.set_main_option(
+    "sqlalchemy.url",
+    settings.database_url.replace("%", "%%"),
+)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

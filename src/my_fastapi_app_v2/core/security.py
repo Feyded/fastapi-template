@@ -23,7 +23,7 @@ def create_access_token(
 
     return jwt.encode(
         payload,
-        settings.SECRET_KEY,
+        settings.secret_key,
         algorithm=ALGORITHM,
     )
 

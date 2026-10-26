@@ -3,11 +3,11 @@ from collections.abc import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
-DATABASE_URL = "sqlite:///./tasks.db"
+from my_fastapi_app_v2.core.settings import settings
 
 engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False},
+    settings.database_url,
+    pool_pre_ping=True,
 )
 
 SessionLocal = sessionmaker(
