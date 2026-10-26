@@ -1,5 +1,5 @@
 [project]
-name = "template"
+name = "app"
 version = "0.1.0"
 description = "Template for creating a backend api using fastapi"
 readme = "README.md"
