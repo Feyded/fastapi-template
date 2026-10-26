@@ -21,11 +21,7 @@ def list_tasks(
     limit: int = Query(default=10, ge=1, le=100),
 ):
     tasks = task_service.list_tasks(db, page, limit)
-
-    return {
-        "message": "Tasks retrieved successfully",
-        "data": tasks,
-    }
+    return {"message": "Tasks retrieved successfully", "data": tasks}
 
 
 @router.get("/{task_id}", response_model=TaskSingleResponse)
