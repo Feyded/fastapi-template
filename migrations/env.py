@@ -3,9 +3,9 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-import my_fastapi_app_v2.models
-from my_fastapi_app_v2.core.settings import settings
-from my_fastapi_app_v2.database import Base
+import app.models
+from app.core.settings import settings
+from app.database import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

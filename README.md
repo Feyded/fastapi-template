@@ -24,7 +24,7 @@ Create file and simple api
 
 Run the project for development
 
-- uv run fastapi dev src/my_fastapi_app_v2/main.py
+- uv run fastapi dev src/app/main.py
 
 Install package
 
@@ -87,4 +87,4 @@ Install pymsql when using mysql
 
 Run seeder
 
-- uv run python -m my_fastapi_app_v2.seed
+- uv run python -m app.seed

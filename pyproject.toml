@@ -1,7 +1,7 @@
 [project]
-name = "my-fastapi-app-v2"
+name = "template"
 version = "0.1.0"
-description = "Add your description here"
+description = "Template for creating a backend api using fastapi"
 readme = "README.md"
 authors = [
     { name = "Dean Zaballero", email = "126765808+Feyded@users.noreply.github.com" }
@@ -18,9 +18,6 @@ dependencies = [
     "slowapi>=0.1.10",
     "sqlalchemy>=2.1.4",
 ]
-
-[project.scripts]
-my-fastapi-app-v2 = "my_fastapi_app_v2:main"
 
 [build-system]
 requires = ["uv_build>=0.13.0,<0.14.0"]

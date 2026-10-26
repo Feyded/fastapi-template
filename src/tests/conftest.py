@@ -5,9 +5,9 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from my_fastapi_app_v2.database import Base, get_db
-from my_fastapi_app_v2.main import app
-from my_fastapi_app_v2.models.task import Task
+from app.database import Base, get_db
+from app.main import app
+from app.models.task import Task
 
 
 @pytest.fixture
