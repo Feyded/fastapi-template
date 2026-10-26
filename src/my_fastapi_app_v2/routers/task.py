@@ -51,7 +51,7 @@ def delete_task(task_id: int, db: DbSession):
 @router.post(
     "/", response_model=TaskSingleResponse, status_code=status.HTTP_201_CREATED
 )
-def create_task_endpoint(payload: TaskCreate, db: DbSession, current_user: CurrentUser):
+def create_task(payload: TaskCreate, db: DbSession, current_user: CurrentUser):
     task = task_service.create_task(db, payload, current_user)
 
     return {

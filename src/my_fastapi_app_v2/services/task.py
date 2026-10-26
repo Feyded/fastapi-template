@@ -39,7 +39,7 @@ def create_task(db: Session, task_data: TaskCreate, current_user: CurrentUser) -
 
     db.add(new_task)
     db.commit()
-    db.refresh(new_task.user.name)
+    db.refresh(new_task)
     return new_task
 
 

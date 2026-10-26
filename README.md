@@ -80,3 +80,6 @@ Install authentication
 - pwdlib[argon2] (securely hashes and verifies passwords)
 - python-multipart (supports OAuth2 form-based login requests)
 - uv add pyjwt "pwdlib[argon2]" python-multipart
+
+Install pymsql when using mysql
+- uv add pymsql
