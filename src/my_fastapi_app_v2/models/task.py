@@ -4,9 +4,10 @@ from sqlalchemy import Date, ForeignKey, String, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from my_fastapi_app_v2.database import Base
+from my_fastapi_app_v2.models.mixins import TimestampMixin
 
 
-class Task(Base):
+class Task(TimestampMixin, Base):
     __tablename__ = "tasks"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -38,4 +39,4 @@ class Task(Base):
         nullable=True,
     )
 
-    user: Mapped[User] = relationship(back_populates="tasks")
+    user: Mapped["User"] = relationship(back_populates="tasks")

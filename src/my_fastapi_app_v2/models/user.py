@@ -2,10 +2,10 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from my_fastapi_app_v2.database import Base
-from my_fastapi_app_v2.models.task import Task
+from my_fastapi_app_v2.models.mixins import TimestampMixin
 
 
-class User(Base):
+class User(TimestampMixin, Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -33,4 +33,4 @@ class User(Base):
         nullable=False,
     )
 
-    tasks: Mapped[list[Task]] = relationship(back_populates="user")
+    tasks: Mapped[list["Task"]] = relationship(back_populates="user")
