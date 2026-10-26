@@ -53,7 +53,7 @@ CurrentUser = Annotated[User, Depends(get_current_user)]
 
 def require_role(allowed_roles: list[str]):
     def role_checker(
-        current_user: Annotated[User, Depends(get_current_user)],
+        current_user: CurrentUser,
     ) -> User:
         if current_user.role not in allowed_roles:
             raise ForbiddenError("You do not have permission to access this resource")
