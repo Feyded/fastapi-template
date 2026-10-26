@@ -82,4 +82,9 @@ Install authentication
 - uv add pyjwt "pwdlib[argon2]" python-multipart
 
 Install pymsql when using mysql
+
 - uv add pymsql
+
+Run seeder
+
+- uv run python -m my_fastapi_app_v2.seed
