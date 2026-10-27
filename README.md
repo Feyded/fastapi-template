@@ -88,3 +88,7 @@ Install pymsql when using mysql
 Run seeder
 
 - uv run python -m app.seed
+
+After git clone run this
+
+- uv sync
