@@ -4,7 +4,7 @@ from sqlalchemy import Date, ForeignKey, String, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
-from app.models.mixins import TimestampMixin
+from app.shared.mixins import TimestampMixin
 
 
 class Task(TimestampMixin, Base):
