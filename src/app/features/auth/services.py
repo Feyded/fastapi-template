@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 
 from app.core.security import create_access_token, verify_password
 from app.exceptions import UnauthorizedError
-from app.models.user import User
-from app.schemas.auth import UserLogin
+from app.features.auth.schemas import UserLogin
+from app.features.users.model import User
 
 
 def login_user(db: Session, payload: UserLogin) -> tuple[User, str]:

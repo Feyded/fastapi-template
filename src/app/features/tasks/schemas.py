@@ -2,7 +2,7 @@ from datetime import date
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.schemas.user import UserResponse
+from app.features.users.schemas import UserResponse
 
 
 class TaskCreate(BaseModel):

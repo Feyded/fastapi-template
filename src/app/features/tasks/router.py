@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query, Response, status
 
 from app.dependencies import CurrentUser, DbSession, require_role
-from app.schemas.task import (
+from app.features.tasks.schemas import (
     TaskCreate,
     TaskListResponse,
     TaskSingleResponse,

@@ -10,7 +10,7 @@ from app.core.security import ALGORITHM
 from app.core.settings import settings
 from app.database import get_db
 from app.exceptions import ForbiddenError, UnauthorizedError
-from app.models.user import User
+from app.features.users.model import User
 
 DbSession = Annotated[Session, Depends(get_db)]
 

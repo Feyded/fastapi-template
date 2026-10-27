@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.database import Base, get_db
 from app.main import app
-from app.models.task import Task
+from app.features.tasks.model import Task
 
 
 @pytest.fixture

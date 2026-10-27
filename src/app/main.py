@@ -6,7 +6,9 @@ from slowapi.middleware import SlowAPIMiddleware
 from app.core.rate_limiter import limiter
 from app.exception_handlers import app_error_handler
 from app.exceptions import AppError
-from app.routers import auth, task, user
+from app.features.auth import router
+from app.features.tasks import router
+from app.features.users import router
 
 app = FastAPI(title="Task Management API")
 
@@ -20,9 +22,9 @@ app.add_exception_handler(AppError, app_error_handler)
 
 app.add_middleware(SlowAPIMiddleware)
 
-app.include_router(auth.router)
-app.include_router(user.router)
-app.include_router(task.router)
+app.include_router(router.router)
+app.include_router(router.router)
+app.include_router(router.router)
 
 
 @app.get("/")

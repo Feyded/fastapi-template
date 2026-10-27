@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Query, status
 
 from app.dependencies import DbSession
-from app.schemas.user import (
+from app.features.users.schemas import (
     UserCreate,
     UserListResponse,
     UserSingleResponse,
 )
-from app.services import user as user_service
+from app.features.users import user as user_service
 
 router = APIRouter(prefix="/users", tags=["Users"])
 

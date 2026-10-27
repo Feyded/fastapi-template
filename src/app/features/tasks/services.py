@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.dependencies import CurrentUser
 from app.exceptions import ConflictError, NotFoundError
-from app.models.task import Task
-from app.schemas.task import TaskCreate, TaskUpdate
+from app.features.tasks.model import Task
+from app.features.tasks.schemas import TaskCreate, TaskUpdate
 
 
 def list_tasks(db: Session, page: int, limit: int) -> list[Task]:

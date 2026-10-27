@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field
 
-from app.schemas.user import UserResponse
+from app.features.users.services import UserResponse
 
 
 class UserLogin(BaseModel):

@@ -4,7 +4,7 @@ from sqlalchemy import select
 import app.models
 from app.core.security import hash_password
 from app.database import SessionLocal
-from app.models.user import User
+from app.features.users.model import User
 
 
 def seed_users() -> None:

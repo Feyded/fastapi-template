@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 
 from app.core.security import hash_password
 from app.exceptions import ConflictError, NotFoundError
-from app.models.user import User
-from app.schemas.user import UserCreate
+from app.features.users.model import User
+from app.features.users.schemas import UserCreate
 
 
 def list_users(db: Session, page: int = 1, limit: int = 10) -> list[User]:
