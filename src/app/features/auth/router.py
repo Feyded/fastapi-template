@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Request, Response
 
 from app.core.rate_limiter import limiter
+from app.dependencies import DbSession
 from app.features.auth import services as auth_service
 from app.features.auth.schemas import LoginResponse, UserLogin
-from src.app.dependencies import DbSession
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 

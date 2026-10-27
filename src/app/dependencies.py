@@ -6,9 +6,9 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt.exceptions import InvalidTokenError
 from sqlalchemy.orm import Session
 
+from app.core.database import get_db
 from app.core.security import ALGORITHM
 from app.core.settings import settings
-from app.database import get_db
 from app.exceptions import ForbiddenError, UnauthorizedError
 from app.features.users.model import User
 

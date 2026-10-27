@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, Query, Response, status
 
 from app.dependencies import CurrentUser, DbSession, require_role
+from app.features.tasks import services as task_service
 from app.features.tasks.schemas import (
     TaskCreate,
     TaskListResponse,
     TaskSingleResponse,
     TaskUpdate,
 )
-from app.services import task as task_service
 
 router = APIRouter(
     prefix="/tasks", tags=["Tasks"], dependencies=[Depends(require_role(["user"]))]
