@@ -8,7 +8,7 @@ from src.app.dependencies import DbSession
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-@router.post("/login", response_model=LoginResponse, status_code=200)
+@router.post("/login", response_model=LoginResponse)
 @limiter.limit("5/minute")
 def login(
     request: Request,
