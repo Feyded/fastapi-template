@@ -11,7 +11,7 @@ from app.features.auth import router as auth_router
 from app.features.tasks import router as task_router
 from app.features.users import router as user_router
 
-app = FastAPI(title="Task Management API")
+app = FastAPI(title="FastAPI Template")
 
 app.state.limiter = limiter
 
@@ -40,7 +40,7 @@ app.include_router(user_router)
 
 @app.get("/")
 def root():
-    return {"message": "Task Management API is running"}
+    return {"message": "FastAPI Template is running"}
 
 
 @app.get("/health")
