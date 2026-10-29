@@ -1,4 +1,4 @@
-# FastAPI Template Setup
+# FastAPI Template Setup by Dean
 
 ## Prerequisites
 
@@ -98,8 +98,8 @@ Open the API documentation:
 | `uv sync`                                                           | Install project dependencies |
 | `uv add package-name`                                               | Add a dependency             |
 | `uv remove package-name`                                            | Remove a dependency          |
-| `uv run python -m fastapi dev src/app/main.py`           | Start the development server |
-| `uv run python -m fastapi run src/app/main.py`           | Start the production server  |
+| `uv run python -m fastapi dev src/app/main.py`                      | Start the development server |
+| `uv run python -m fastapi run src/app/main.py`                      | Start the production server  |
 | `uv run python -m alembic upgrade head`                             | Apply database migrations    |
 | `uv run python -m alembic revision --autogenerate -m "description"` | Generate a migration         |
 | `uv lock`                                                           | Update the lockfile          |
