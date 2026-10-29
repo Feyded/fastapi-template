@@ -12,8 +12,8 @@ Install the following before setting up the project:
 ## 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd <project-directory>
+git clone https://github.com/Feyded/template-fastapi.git
+cd template-fastapi
 ```
 
 ## 2. Install uv
