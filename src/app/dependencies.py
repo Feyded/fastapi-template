@@ -2,7 +2,6 @@ from typing import Annotated
 
 import jwt
 from fastapi import Depends
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt.exceptions import InvalidTokenError
 from sqlalchemy.orm import Session
 
@@ -14,14 +13,11 @@ from app.features.users.model import User
 
 DbSession = Annotated[Session, Depends(get_db)]
 
-bearer_scheme = HTTPBearer()
-
 
 def get_current_user(
-    credentials: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)],
+    token: str,
     db: DbSession,
 ) -> User:
-    token = credentials.credentials
 
     try:
         payload = jwt.decode(
