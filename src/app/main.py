@@ -7,9 +7,9 @@ from slowapi.middleware import SlowAPIMiddleware
 from app.core.rate_limiter import limiter
 from app.exception_handlers import app_error_handler
 from app.exceptions import AppError
-from app.features.auth import router as auth_router
-from app.features.tasks import router as task_router
-from app.features.users import router as user_router
+from app.features.auth.router import router as auth_router
+from app.features.tasks.router import router as task_router
+from app.features.users.router import router as user_router
 
 app = FastAPI(title="FastAPI Template")
 
