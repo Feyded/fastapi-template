@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Response
 
-from app.core import settings
 from app.core.rate_limiter import limiter
+from app.core.settings import settings
 from app.dependencies import DbSession
 from app.features.auth import services as auth_service
 from app.features.auth.schemas import LoginResponse, UserLogin
