@@ -10,8 +10,8 @@ Make UV available in terminal
 
 Create initial python files and configuration
 
-- mkdir my-fastapi-app
-- cd my-fastapi-app
+- mkdir fastapi-template
+- cd fastapi-template
 - uv init
 
 Installs FastAPI and records it as a project dependency
@@ -25,6 +25,7 @@ Create file and simple api
 Run the project for development
 
 - uv run fastapi dev src/app/main.py
+- uv run python -m fastapi dev src/app/main.py
 
 Install package
 
