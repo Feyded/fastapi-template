@@ -1,1 +1,23 @@
+# Environment variables and secrets
 .env
+.env.*
+
+# Keep example environment files tracked
+!.env.example
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+
+# Test and tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
