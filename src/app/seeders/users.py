@@ -1,5 +1,6 @@
 from sqlalchemy import select
 
+import app.models
 from app.core.database import SessionLocal
 from app.core.security import hash_password
 from app.features.users.model import User
