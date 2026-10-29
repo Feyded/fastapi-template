@@ -1,6 +1,9 @@
 from datetime import UTC, datetime, timedelta
+from typing import Annotated
 
 import jwt
+from fastapi import Depends
+from fastapi.security import APIKeyCookie
 from pwdlib import PasswordHash
 
 from app.core.settings import settings
@@ -40,3 +43,14 @@ def verify_password(
         plain_password,
         hashed_password,
     )
+
+
+access_token_cookie = APIKeyCookie(
+    name="access_token",
+    auto_error=False,
+)
+
+AccessToken = Annotated[
+    str | None,
+    Depends(access_token_cookie),
+]
